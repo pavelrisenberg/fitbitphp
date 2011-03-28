@@ -10,7 +10,6 @@
  *
  * Date: 2011/03/29
  * Requires OAuth 1.0.0, SimpleXML
- * @author Pavel Risenberg <mail@pavelrisenberg.com>
  * @version 0.5 ($Id$)
  */
 
