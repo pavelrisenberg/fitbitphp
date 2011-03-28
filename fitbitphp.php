@@ -8,7 +8,7 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/03/28
+ * Date: 2011/03/29
  * Requires OAuth 1.0.0, SimpleXML
  * @author Pavel Risenberg <mail@pavelrisenberg.com>
  * @version 0.5 ($Id$)

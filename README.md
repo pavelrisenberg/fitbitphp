@@ -1,54 +1,57 @@
 ## FitBitPHP ##
 
-Library provides basic wrapper for OAuth-based [FitBit](http://fitbit.com) [REST API](http://dev.fitbit.com), which just launched in BETA and in rapid development. Seek more information on API developments at [dev.fitbit.com](http://dev.fitbit.com).
+Boring basic wrapper for OAuth-based [FitBit](http://fitbit.com) [REST API](http://dev.fitbit.com), which have just launched in BETA and in rapid development. Seek more information on API developments at [dev.fitbit.com](http://dev.fitbit.com).
 
-Library is in BETA as well as API and still could be buggy. We're looking forward to update library as API moves forward, hopefully it will not break backward compatibility. That being said, feel free to fork, add features and send pull request to us if you need them right now, we'll be happy to include them if well done.
+Library is in BETA as well as the API, so still could be buggy. We're looking forward to update library as API moves forward, doing best not to break backward compatibility. That being said, feel free to fork, add features and send pull request to us if you need more awesomness right now, we'll be happy to include them if well done.
 
-Current notes:
+**Current notes:**
 
- * setMetric() method provides a way to select preferred unit system (USA, UK, Metric by default), however still buggy on FitBit side, which could lead to several bugs,
- * Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track them and deploy endpoints for FitBit updates as well as register endpoints at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more.
+ * *Units*: setMetric() method provides a way to select preferred unit system for request/response (USA, UK, Metric by default), however still buggy on FitBit side, which would lead to several bugs,
+ * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy endpoints for FitBit updates as well as register endpoints at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
+ * *Anauthenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials, looking forward to waive this for general calls like `searchFoods`, `getFoodUnits` etc.
 
 
 ## Usage ##
 
-First, don't forget to register your application at http://dev.fitbit.com and obtain cinsumer KEY and SECRET for your application.
+First, as always don't forget to register your application at http://dev.fitbit.com and obtain consumer key and secret for your application.
 
-Library itself handles all OAuth application authorization workflow for you as well as session tracking. This could be used further to provide 'Sign with Fitbit' like feature or just to authorize application to act with FitBit on user's behalf.
+Library itself handles whole OAuth application authorization workflow for you as well as session tracking between page views. This could be used further to provide 'Sign with Fitbit' like feature (look at next code sample) or just to authorize application to act with FitBit API on user's behalf.
 
-Example use case on frontend could look like:
+Example snippet on frontend could look like:
 
     <?php
 
-	require 'fitbitphp.php'
+    require 'fitbitphp.php'
 
     $fitbit = new FitBitPHP(FITBIT_KEY, FITBIT_SECRET);
 
-    $fitbit->initSession('http://example.com/callback');
+    $fitbit->initSession('http://example.com/callback.php');
     $xml = $fitbit->getProfile();
 
     print_r($xml);
 
-Note, that unconditional call to 'initSession' would completely hide your page from the eyes of unauthorized visitor. You could also track if user already authorized FitBit access without automatic authorization start if not:
+Note, that unconditional call to 'initSession' in each page will completely hide them from the eyes of unauthorized visitor, providing private area feature. On the other hand, you could also track if user already authorized access to FitBit without any additional workflow if not:
 
     if($fitbit->sessionStatus())
-        <authorized user>
+        <you_are_authorized_user_yes_you_are>
 
 
-Secondly, if you want to implement some API calls on user's behalf later, when you've already stored OAuth credentials somewhere, you could do exactly that:
+Second, if you want to implement some API calls on user's behalf later (say daemon with no frontend), when you've already stored OAuth credentials somewhere, you could do exactly that:
 
 	require 'fitbitphp.php'
 
-    $fitbit = new FitBitPHP(FITBIT_KEY, FITBIT_SECRET, DEBUG, VERSION);
+    $fitbit = new FitBitPHP(FITBIT_KEY, FITBIT_SECRET);
     $fitbit->setOAuthDetails('token_stored_for_user', 'secret_stored_for_user');
 
     $xml = $fitbit->getProfile();
 
     print_r($xml);
 
+
+**Note.** By default, all requests are made in respect of resources of authorized user, you cab use `setUser` method to set another user, but this would work only for resources/transactions that are available for public.
 	
 
 ## Changelog ##
 
-* Version 0.5: 28 March, 2011:
+* Version 0.5: 29 March, 2011:
    * Initial commit
