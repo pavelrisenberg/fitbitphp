@@ -8,7 +8,7 @@ Library is in BETA as well as the API, so still could be buggy. We're looking fo
 
  * *Units*: setMetric() method provides a way to select preferred unit system for request/response (USA, UK, Metric by default), however still buggy on FitBit side, which would lead to several bugs,
  * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy endpoints for FitBit updates as well as register endpoints at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
- * *Un-authenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials, looking forward to waive this for general calls like `searchFoods`, `getFoodUnits` etc.
+ * *Un-authenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials, looking forward to waive this for general calls like `searchFoods`, `getFoodUnits` etc. as API develops stable attitude in this respect.
 
 
 ## Usage ##
