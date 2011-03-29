@@ -30,9 +30,9 @@ Example snippet on frontend could look like:
 
     print_r($xml);
 
-Note, that unconditional call to 'initSession' in each page will completely hide them from the eyes of unauthorized visitor, providing private area feature. On the other hand, you could also track if user already authorized access to FitBit without any additional workflow if not:
+Note, that unconditional call to 'initSession' in each page will completely hide them from the eyes of unauthorized visitor. Don't be amazed, however, it's not a right way to make area private on your site. On the other hand, you could just track if user already authorized access to FitBit without any additional workflow, if it was not true:
 
-    if($fitbit->sessionStatus())
+    if($fitbit->sessionStatus() == 2)
         <you_are_authorized_user_yes_you_are>
 
 
