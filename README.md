@@ -53,5 +53,7 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 ## Changelog ##
 
+* Version 0.51: 04 April, 2011:
+   * API+: Added manualCalories and distanceUnit to logActivity()
 * Version 0.5: 29 March, 2011:
    * Initial commit
