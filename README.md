@@ -7,7 +7,7 @@ Library is in BETA as well as the API, so still could be buggy. We're looking fo
 **Current notes:**
 
  * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy endpoints for FitBit updates as well as register endpoints at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
- * *Unauthenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials (via internal session tracking or tokens provided – examples), looking forward to waive this for general reference calls like `searchFoods`, `getFoodUnits` etc. as API develops stable attitude in this respect.
+ * *Unauthenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials (via internal session tracking or tokens provided – see examples), looking forward to waive this for general reference calls like `searchFoods`, `getFoodUnits` etc. as API develops stable attitude in this respect.
 
 
 ## Usage ##
