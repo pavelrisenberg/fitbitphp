@@ -1,14 +1,13 @@
 ## FitBitPHP ##
 
-Boring basic wrapper for OAuth-based [FitBit](http://fitbit.com) [REST API](http://dev.fitbit.com), which have just launched in BETA and in rapid development. Seek more information on API developments at [dev.fitbit.com](http://dev.fitbit.com).
+Basic wrapper for OAuth-based [FitBit](http://fitbit.com) [REST API](http://dev.fitbit.com), which have just launched in BETA and in rapid development. Seek more information on API developments at [dev.fitbit.com](http://dev.fitbit.com).
 
 Library is in BETA as well as the API, so still could be buggy. We're looking forward to update library as API moves forward, doing best not to break backward compatibility. That being said, feel free to fork, add features and send pull request to us if you need more awesomness right now, we'll be happy to include them if well done.
 
 **Current notes:**
 
- * *Units*: setMetric() method provides a way to select preferred unit system for request/response (USA, UK, Metric by default), however still buggy on FitBit side, which would lead to several bugs,
  * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy endpoints for FitBit updates as well as register endpoints at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
- * *Un-authenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials, looking forward to waive this for general calls like `searchFoods`, `getFoodUnits` etc. as API develops stable attitude in this respect.
+ * *Unauthenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials (via internal session tracking or tokens provided – examples), looking forward to waive this for general reference calls like `searchFoods`, `getFoodUnits` etc. as API develops stable attitude in this respect.
 
 
 ## Usage ##
@@ -48,7 +47,7 @@ Second, if you want to implement some API calls on user's behalf later (say daem
     print_r($xml);
 
 
-**Note.** By default, all requests are made in respect of resources of authorized user, you cab use `setUser` method to set another user, but this would work only for resources/transactions that are available for public.
+**Note.** By default, all requests are made in respect of resources of authorized user, however you can use `setUser` method to set another user for next calls, but this would work only for resources/transactions that are available on behalf of authorized user (i.e. to fetch public user profiles).
 
 
 ## Changelog ##
