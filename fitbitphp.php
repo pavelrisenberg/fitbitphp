@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.5. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.52. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to branch, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/03/28
+ * Date: 2011/04/14
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.5 ($Id$)
+ * @version 0.52 ($Id$)
  */
 
 
@@ -37,7 +37,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.5';
+    protected $userAgent = 'FitBitPHP 0.52';
     protected $debug;
 
 
@@ -47,7 +47,7 @@ class FitBitPHP
      * @param int $debug Debug mode (0/1) enables OAuth internal debug)
      * @param string $userAgent User-agent to use in API calls
      */
-    public function __construct($consumer_key, $consumer_secret, $debug = 0, $userAgent = null)
+    public function __construct($consumer_key, $consumer_secret, $debug = 1, $userAgent = null)
     {
 
         $this->oauth = new OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
@@ -665,6 +665,7 @@ class FitBitPHP
 
         $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/weight.xml",
                             $parameters, OAUTH_HTTP_METHOD_POST, $headers);
+
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
             return true;
@@ -889,6 +890,7 @@ class FitBitPHP
     {
         $headers = array();
         $headers['User-Agent'] = $this->userAgent;
+        $headers['X-Fitbit-Client-Version'] = $this->userAgent;
 
         if ($this->metric == 1) {
             $headers['Accept-Language'] = 'en_US';

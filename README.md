@@ -49,10 +49,12 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 
 **Note.** By default, all requests are made in respect of resources of authorized user, you cab use `setUser` method to set another user, but this would work only for resources/transactions that are available for public.
-	
+
 
 ## Changelog ##
 
+* Version 0.52: 14 April, 2011:
+   * Bug: Added X-Fitbit-Client-Version header as a workaround for Fitbit API unit system bug
 * Version 0.51: 04 April, 2011:
    * API+: Added manualCalories and distanceUnit to logActivity()
 * Version 0.5: 29 March, 2011:
