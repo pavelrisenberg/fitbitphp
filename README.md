@@ -52,6 +52,8 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 ## Changelog ##
 
+* Version 0.53: 26 April, 2011:
+   * Bug: Correct path for getActivity endpoint
 * Version 0.52: 14 April, 2011:
    * Bug: Added X-Fitbit-Client-Version header as a workaround for Fitbit API unit system bug
 * Version 0.51: 04 April, 2011:

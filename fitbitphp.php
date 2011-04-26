@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.52. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.53. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to branch, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/04/14
+ * Date: 2011/04/26
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.52 ($Id$)
+ * @version 0.53 ($Id$)
  */
 
 
@@ -259,7 +259,7 @@ class FitBitPHP
     public function getActivity($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/" . $id . ".xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "activities/" . $id . ".xml", null,
                             OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
