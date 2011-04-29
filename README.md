@@ -50,8 +50,11 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 **Note.** By default, all requests are made in respect of resources of authorized user, however you can use `setUser` method to set another user for next calls, but this would work only for resources/transactions that are available on behalf of authorized user (i.e. to fetch public user profiles).
 
 
+
 ## Changelog ##
 
+* Version 0.54: 29 April, 2011:
+   * API+: Added getBody endpoint for body measurements
 * Version 0.53: 26 April, 2011:
    * Bug: Correct path for getActivity endpoint
 * Version 0.52: 14 April, 2011:

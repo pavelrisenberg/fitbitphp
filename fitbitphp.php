@@ -1,22 +1,23 @@
 <?php
 /**
- * FitBitPHP v.0.53. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.54. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
- *       feel free to branch, extend and send pull requests to us.
+ *       feel free to fork, extend and send pull requests to us.
  *
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/04/26
+ * Date: 2011/04/29
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.53 ($Id$)
+ * @version 0.54 ($Id$)
  */
 
 
 class FitBitPHP
 {
 
+    
     /**
      * API Constants
      *
@@ -37,7 +38,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.52';
+    protected $userAgent = 'FitBitPHP 0.54';
     protected $debug;
 
 
@@ -259,8 +260,11 @@ class FitBitPHP
     public function getActivity($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "activities/" . $id . ".xml", null,
-                            OAUTH_HTTP_METHOD_GET, $headers);
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "activities/" . $id . ".xml", null,
+                                OAUTH_HTTP_METHOD_GET, $headers);
+        } catch (Exception $E) {
+        }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -648,6 +652,29 @@ class FitBitPHP
 
 
     /**
+     * Get user body measurements
+     *
+     * @throws FitBitException
+     * @param  DateTime $date
+     * @return SimpleXMLElement
+     */
+    public function getBody($date)
+    {
+        $headers = $this->getHeaders();
+        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/date/" . $date->format('Y-m-d') . ".xml",
+                            null, OAUTH_HTTP_METHOD_GET, $headers);
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xml = simplexml_load_string($response);
+            return $xml;
+        } else {
+            throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
+    /**
      * Log user weight
      *
      * @throws FitBitException
@@ -890,6 +917,7 @@ class FitBitPHP
     {
         $headers = array();
         $headers['User-Agent'] = $this->userAgent;
+        /* Not documented and should already work with units without this header */
         $headers['X-Fitbit-Client-Version'] = $this->userAgent;
 
         if ($this->metric == 1) {
