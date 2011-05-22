@@ -53,6 +53,8 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 ## Changelog ##
 
+* Version 0.55: 29 April, 2011:
+   * Update: Update to reflect new document format in Time-Series
 * Version 0.54: 29 April, 2011:
    * API+: Added getBody endpoint for body measurements
 * Version 0.53: 26 April, 2011:

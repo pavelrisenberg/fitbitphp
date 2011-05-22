@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.54. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.55. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,7 +8,7 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/04/29
+ * Date: 2011/05/22
  * Requires OAuth 1.0.0, SimpleXML
  * @version 0.54 ($Id$)
  */
@@ -17,7 +17,6 @@
 class FitBitPHP
 {
 
-    
     /**
      * API Constants
      *
@@ -38,7 +37,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.54';
+    protected $userAgent = 'FitBitPHP 0.55';
     protected $debug;
 
 
@@ -786,6 +785,7 @@ class FitBitPHP
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
             $json = json_decode($response);
+            $path = str_replace('/', '-', substr($path, 1));
             return $json->$path;
         } else {
             throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
