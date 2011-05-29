@@ -55,7 +55,7 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 * Version 0.56: 22 May, 2011:
    * Bug: Search-Foods
-   * API+: Added getMeals endpoint
+   * API+: Added getMeals endpoint to fetch meal sets
 * Version 0.55: 22 May, 2011:
    * Update: Update to reflect new document format in Time-Series
 * Version 0.54: 29 April, 2011:
