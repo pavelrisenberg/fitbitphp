@@ -1,16 +1,16 @@
 <?php
 /**
- * FitBitPHP v.0.55. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.56. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
  *
  * - https://github.com/heyitspavel/fitbitphp
  *
- *
- * Date: 2011/05/22
+ * 
+ * Date: 2011/05/29
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.54 ($Id$)
+ * @version 0.56 ($Id$)
  */
 
 
@@ -33,12 +33,14 @@ class FitBitPHP
      */
     protected $oauth;
     protected $oauth_Token, $oauth_Secret;
-
+    
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.55';
+    protected $userAgent = 'FitBitPHP 0.56';
     protected $debug;
+
+
 
 
     /**
@@ -64,8 +66,7 @@ class FitBitPHP
     /**
      * @return OAuth debugInfo object. Debug should be enabled in __construct
      */
-    public function oauthDebug()
-    {
+    public function oauthDebug() {
         return $this->oauth->debugInfo;
     }
 
@@ -81,10 +82,10 @@ class FitBitPHP
         if (empty($session)) {
             session_start();
         }
-        if (empty($_SESSION['fitbit_Session']))
+        if(empty($_SESSION['fitbit_Session']))
             $_SESSION['fitbit_Session'] = 0;
 
-        return (int)$_SESSION['fitbit_Session'];
+        return (int) $_SESSION['fitbit_Session'];
     }
 
     /**
@@ -171,6 +172,7 @@ class FitBitPHP
     }
 
 
+
     /**
      * Set FitBit userId for future API calls
      *
@@ -181,6 +183,7 @@ class FitBitPHP
     {
         $this->userId = $userId;
     }
+
 
 
     /**
@@ -194,6 +197,7 @@ class FitBitPHP
     {
         $this->metric = $metric;
     }
+
 
 
     /**
@@ -210,7 +214,7 @@ class FitBitPHP
      */
     public function getProfile($userId = null)
     {
-        if (!$userId)
+        if(!$userId)
             $userId = $this->userId;
 
         $headers = $this->getHeaders();
@@ -259,10 +263,10 @@ class FitBitPHP
     public function getActivity($id)
     {
         $headers = $this->getHeaders();
-        try {
-            $this->oauth->fetch($this->baseApiUrl . "activities/" . $id . ".xml", null,
-                                OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        try{
+        $this->oauth->fetch($this->baseApiUrl . "activities/" . $id . ".xml", null,
+                            OAUTH_HTTP_METHOD_GET, $headers);
+        } catch(Exception $E){
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -341,6 +345,7 @@ class FitBitPHP
     }
 
 
+
     /**
      * Log user activity
      *
@@ -356,21 +361,21 @@ class FitBitPHP
      */
     public function logActivity($date, $activityId, $duration, $calories = null, $distance = null, $distanceUnit = null)
     {
-        $distanceUnits = array('Centimeter', 'Foot', 'Inch', 'Kilometer', 'Meter', 'Mile', 'Millimeter', 'Steps', 'Yards');
-
+    	$distanceUnits = array('Centimeter','Foot','Inch','Kilometer','Meter','Mile','Millimeter','Steps','Yards');
+    
         $headers = $this->getHeaders();
         $parameters = array();
         $parameters['date'] = $date->format('Y-m-d');
         $parameters['startTime'] = $date->format('H:i');
         $parameters['activityId'] = $activityId;
         $parameters['durationMillis'] = $duration;
-        if (isset($calories))
-            $parameters['manualCalories'] = $calories;
-        if (isset($distance))
-            $parameters['distance'] = $distance;
-        if (isset($distanceUnit) && in_array($distanceUnit, $distanceUnits))
-            $parameters['distanceUnit'] = $distanceUnit;
-
+        if(isset($calories))
+	        $parameters['manualCalories'] = $calories;
+        if(isset($distance))
+	        $parameters['distance'] = $distance;
+        if(isset($distanceUnit) && in_array($distanceUnit, $distanceUnits))
+        	$parameters['distanceUnit'] = $distanceUnit;
+        	
         $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities.xml", $parameters,
                             OAUTH_HTTP_METHOD_POST, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -608,6 +613,28 @@ class FitBitPHP
 
 
     /**
+     * Get user meal sets
+     *
+     * @throws FitBitException
+     * @return SimpleXMLElement
+     */
+    public function getMeals()
+    {
+        $headers = $this->getHeaders();
+        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/meals.xml",
+                            null, OAUTH_HTTP_METHOD_GET, $headers);
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xml = simplexml_load_string($response);
+            return $xml;
+        } else {
+            throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+    
+
+    /**
      * Get food units library
      *
      * @throws FitBitException
@@ -638,7 +665,7 @@ class FitBitPHP
     public function searchFoods($query)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "foods/search.xml?query=" . $query, null, OAUTH_HTTP_METHOD_GET, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "foods/search.xml?query=" . rawurlencode($query), null, OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -648,6 +675,7 @@ class FitBitPHP
             throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
+
 
 
     /**
@@ -671,6 +699,7 @@ class FitBitPHP
             throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
+
 
 
     /**
@@ -908,6 +937,8 @@ class FitBitPHP
         $responseInfo = $this->oauth->getLastResponseInfo();
         return new FitBitResponse($response, $responseInfo['http_code']);
     }
+
+
 
 
     /**
