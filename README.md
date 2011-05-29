@@ -53,7 +53,7 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 ## Changelog ##
 
-* Version 0.56: 22 May, 2011:
+* Version 0.56: 29 May, 2011:
    * Bug: Search-Foods
    * API+: Added getMeals endpoint to fetch meal sets
 * Version 0.55: 22 May, 2011:
