@@ -53,6 +53,14 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 ## Changelog ##
 
+* Version 0.57: 06 June, 2011:
+   * API+: createFood
+   * API+: updateProfile
+   * API+: getFriends
+   * API+: getFriendsLeaderboard
+   * API+: inviteFriend, acceptFriend, rejectFriend
+   * Bug: now all calls during OAuth handshake are made through https
+   * Bug: en_GB unit system
 * Version 0.56: 29 May, 2011:
    * Bug: Search-Foods
    * API+: Added getMeals endpoint to fetch meal sets
