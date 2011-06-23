@@ -53,6 +53,9 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 ## Changelog ##
 
+* Version 0.58: 23 June, 2011:
+   * API+: getWater, logWater, deleteWater
+   * API+: getSleep, logSleep, deleteSleep
 * Version 0.57: 06 June, 2011:
    * API+: createFood
    * API+: updateProfile
