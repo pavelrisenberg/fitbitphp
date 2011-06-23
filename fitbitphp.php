@@ -811,14 +811,14 @@ class FitBitPHP
      */
     public function logWater($date, $amount, $waterUnit = null)
     {
-        $distanceUnits = array('ml', 'fl oz', 'cup');
+        $waterUnits = array('ml', 'fl oz', 'cup');
 
         $headers = $this->getHeaders();
         $parameters = array();
         $parameters['date'] = $date->format('Y-m-d');
         $parameters['amount'] = $amount;
         if (isset($waterUnit) && in_array($waterUnit, $waterUnits))
-            $parameters['waterUnit'] = $waterUnit;
+            $parameters['unit'] = $waterUnit;
 
         $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/water.xml", $parameters,
                             OAUTH_HTTP_METHOD_POST, $headers);
