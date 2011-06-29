@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.58. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.59. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/06/21
+ * Date: 2011/06/29
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.58 ($Id$)
+ * @version 0.59 ($Id$)
  */
 
 
@@ -40,7 +40,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.58';
+    protected $userAgent = 'FitBitPHP 0.59';
     protected $debug;
 
 
@@ -228,13 +228,10 @@ class FitBitPHP
      * @param string $userId UserId of public profile, if none using set with setUser or '-' by default
      * @return SimpleXMLElement
      */
-    public function getProfile($userId = null)
+    public function getProfile()
     {
-        if (!$userId)
-            $userId = $this->userId;
-
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $userId . "/profile.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/profile.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -275,7 +272,7 @@ class FitBitPHP
         if (isset($timezone))
             $parameters['timezone'] = $timezone;
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/profile.xml",
+        $this->oauth->fetch($this->baseApiUrl . "user/-/profile.xml",
                             $parameters, OAUTH_HTTP_METHOD_POST, $headers);
 
         $response = $this->oauth->getLastResponse();
@@ -347,7 +344,7 @@ class FitBitPHP
     public function getRecentActivities()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/recent.xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/activities/recent.xml", null,
                             OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -369,7 +366,7 @@ class FitBitPHP
     public function getFrequentActivities()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/frequent.xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/activities/frequent.xml", null,
                             OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -391,7 +388,7 @@ class FitBitPHP
     public function getFavoriteActivities()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/favorite.xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/activities/favorite.xml", null,
                             OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -434,7 +431,7 @@ class FitBitPHP
         if (isset($distanceUnit) && in_array($distanceUnit, $distanceUnits))
             $parameters['distanceUnit'] = $distanceUnit;
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities.xml", $parameters,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/activities.xml", $parameters,
                             OAUTH_HTTP_METHOD_POST, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
@@ -455,7 +452,7 @@ class FitBitPHP
     public function deleteActivity($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/" . $id . ".xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/activities/" . $id . ".xml", null,
                             OAUTH_HTTP_METHOD_DELETE, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -476,7 +473,7 @@ class FitBitPHP
     public function addFavoriteActivity($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/log/favorite/" . $id . ".xml",
+        $this->oauth->fetch($this->baseApiUrl . "user/-/activities/log/favorite/" . $id . ".xml",
                             null, OAUTH_HTTP_METHOD_POST, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
@@ -497,7 +494,7 @@ class FitBitPHP
     public function deleteFavoriteActivity($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/log/favorite/" . $id . ".xml",
+        $this->oauth->fetch($this->baseApiUrl . "user/-/activities/log/favorite/" . $id . ".xml",
                             null, OAUTH_HTTP_METHOD_DELETE, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -540,7 +537,7 @@ class FitBitPHP
     public function getRecentFoods()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/recent.xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/recent.xml", null,
                             OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -562,7 +559,7 @@ class FitBitPHP
     public function getFrequentFoods()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/frequent.xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/frequent.xml", null,
                             OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -584,7 +581,7 @@ class FitBitPHP
     public function getFavoriteFoods()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/favorite.xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/favorite.xml", null,
                             OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -617,7 +614,7 @@ class FitBitPHP
         $parameters['mealTypeId'] = $mealTypeId;
         $parameters['unitId'] = $unitId;
         $parameters['amount'] = $amount;
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log.xml", $parameters,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log.xml", $parameters,
                             OAUTH_HTTP_METHOD_POST, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
@@ -638,7 +635,7 @@ class FitBitPHP
     public function addFavoriteFood($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/favorite/" . $id . ".xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/favorite/" . $id . ".xml", null,
                             OAUTH_HTTP_METHOD_POST, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
@@ -659,7 +656,7 @@ class FitBitPHP
     public function deleteFavoriteFood($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/favorite/" . $id . ".xml",
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/favorite/" . $id . ".xml",
                             null, OAUTH_HTTP_METHOD_DELETE, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -679,7 +676,7 @@ class FitBitPHP
     public function getMeals()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/meals.xml",
+        $this->oauth->fetch($this->baseApiUrl . "user/-/meals.xml",
                             null, OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -788,7 +785,7 @@ class FitBitPHP
     public function getWater($date)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/water/date/" . $date->format('Y-m-d') . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water/date/" . $date->format('Y-m-d') . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -820,7 +817,7 @@ class FitBitPHP
         if (isset($waterUnit) && in_array($waterUnit, $waterUnits))
             $parameters['unit'] = $waterUnit;
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/water.xml", $parameters,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water.xml", $parameters,
                             OAUTH_HTTP_METHOD_POST, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -843,7 +840,7 @@ class FitBitPHP
     public function deleteWater($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/water/" . $id . ".xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water/" . $id . ".xml", null,
                             OAUTH_HTTP_METHOD_DELETE, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
@@ -893,7 +890,7 @@ class FitBitPHP
         $parameters['startTime'] = $date->format('H:i');
         $parameters['duration'] = $duration;
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/sleep.xml", $parameters,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/sleep.xml", $parameters,
                             OAUTH_HTTP_METHOD_POST, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -916,7 +913,7 @@ class FitBitPHP
     public function deleteSleep($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/sleep/" . $id . ".xml", null,
+        $this->oauth->fetch($this->baseApiUrl . "user/-/sleep/" . $id . ".xml", null,
                             OAUTH_HTTP_METHOD_DELETE, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
@@ -936,6 +933,7 @@ class FitBitPHP
      */
     public function getBody($date)
     {
+        $this->oauth->enableDebug();
         $headers = $this->getHeaders();
         $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/date/" . $date->format('Y-m-d') . ".xml",
                             null, OAUTH_HTTP_METHOD_GET, $headers);
@@ -966,7 +964,7 @@ class FitBitPHP
         if (isset($date))
             $parameters['date'] = $date->format('Y-m-d');
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/weight.xml",
+        $this->oauth->fetch($this->baseApiUrl . "user/-/body/weight.xml",
                             $parameters, OAUTH_HTTP_METHOD_POST, $headers);
 
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1079,7 +1077,7 @@ class FitBitPHP
     public function getDevices()
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/devices.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-/devices.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -1101,7 +1099,7 @@ class FitBitPHP
     public function getDevice($id)
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/devices/" . $id . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-/devices/" . $id . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -1144,7 +1142,7 @@ class FitBitPHP
     public function getFriendsLeaderboard($period = '7d')
     {
         $headers = $this->getHeaders();
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/friends/leaders/" . $period . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-/friends/leaders/" . $period . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
@@ -1173,7 +1171,7 @@ class FitBitPHP
         if (isset($email))
             $parameters['invitedUserEmail'] = $email;
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/friends/invitations.xml", $parameters, OAUTH_HTTP_METHOD_POST, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-/friends/invitations.xml", $parameters, OAUTH_HTTP_METHOD_POST, $headers);
 
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
@@ -1197,7 +1195,7 @@ class FitBitPHP
         $parameters = array();
         $parameters['accept'] = 'true';
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/friends/invitations/" . $userId . ".xml", $parameters, OAUTH_HTTP_METHOD_POST, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-/friends/invitations/" . $userId . ".xml", $parameters, OAUTH_HTTP_METHOD_POST, $headers);
 
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
@@ -1221,7 +1219,7 @@ class FitBitPHP
         $parameters = array();
         $parameters['accept'] = 'true';
 
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/friends/invitations/" . $userId . ".xml", $parameters, OAUTH_HTTP_METHOD_POST, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-/friends/invitations/" . $userId . ".xml", $parameters, OAUTH_HTTP_METHOD_POST, $headers);
 
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {

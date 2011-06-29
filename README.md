@@ -53,6 +53,9 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 ## Changelog ##
 
+* Version 0.59: 29 June, 2011:
+   * Bugs: bug fixes
+   * Deprecated: getProfile no longer accept $userId, use setUser instead
 * Version 0.58: 23 June, 2011:
    * API+: getWater, logWater, deleteWater
    * API+: getSleep, logSleep, deleteSleep
