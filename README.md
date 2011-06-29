@@ -1,4 +1,4 @@
-## FitBitPHP ##
+## FitbitPHP ##
 
 Basic wrapper for OAuth-based [FitBit](http://fitbit.com) [REST API](http://dev.fitbit.com), which have just launched in BETA and in rapid development. Seek more information on API developments at [dev.fitbit.com](http://dev.fitbit.com).
 
@@ -6,8 +6,8 @@ Library is in BETA as well as the API, so still could be buggy. We're looking fo
 
 **Current notes:**
 
- * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy endpoints for FitBit updates as well as register endpoints at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
- * *Unauthenticated calls*: for now all calls should be made on behalf of authorized user with his token credentials (via internal session tracking or tokens provided – see examples), looking forward to waive this for general reference calls like `searchFoods`, `getFoodUnits` etc. as API develops stable attitude in this respect.
+ * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy server endpoints to receive notifications from Fitbit as well as register them at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
+ * *Unauthenticated calls*: Some methods of Fitbit API grant access to public resources without a need for the complete OAuth workflow, `searchFoods` and `getActivities` are two good example of such endpoints. Nevertheless, this calls should be signed with Authentication header as usual, but access_token OAuth parameter is omitted. In terms of FitbitPHP, you can make such calls, but you shouldn't use `initSession` calls and should explicitly set id of the user before the call via `setUser`.  
 
 
 ## Usage ##
