@@ -7,7 +7,7 @@ Library is in BETA as well as the API, so still could be buggy. We're looking fo
 **Current notes:**
 
  * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy server endpoints to receive notifications from Fitbit as well as register them at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
- * *Unauthenticated calls*: Some methods of Fitbit API grant access to public resources without a need for the complete OAuth workflow, `searchFoods` and `getActivities` are two good example of such endpoints. Nevertheless, this calls should be signed with Authentication header as usual, but access_token OAuth parameter is omitted. In terms of FitbitPHP, you can make such calls, but you shouldn't use `initSession` calls and should explicitly set id of the user before the call via `setUser`.  
+ * *Unauthenticated calls*: Some methods of Fitbit API grant access to public resources without need for the complete OAuth workflow, `searchFoods` and `getActivities` are two good example of such endpoints. Nevertheless, this calls should be signed with Authentication header as usual, but access_token OAuth parameter is omitted. In terms of FitbitPHP, you can make such calls, but you shouldn't use `initSession` calls and should explicitly set id of the user before the call via `setUser`.  
 
 
 ## Usage ##
