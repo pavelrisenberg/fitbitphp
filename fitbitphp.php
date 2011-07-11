@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.59. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.60. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/06/29
+ * Date: 2011/07/11
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.59 ($Id$)
+ * @version 0.60 ($Id$)
  */
 
 
@@ -40,14 +40,14 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.59';
+    protected $userAgent = 'FitBitPHP 0.60';
     protected $debug;
 
 
     /**
      * @param string $consumer_key Application consumer key for FitBit API
      * @param string $consumer_secret Application secret
-     * @param int $debug Debug mode (0/1) enables OAuth internal debug)
+     * @param int $debug Debug mode (0/1) enables OAuth internal debug
      * @param string $userAgent User-agent to use in API calls
      */
     public function __construct($consumer_key, $consumer_secret, $debug = 1, $userAgent = null)
@@ -933,7 +933,6 @@ class FitBitPHP
      */
     public function getBody($date)
     {
-        $this->oauth->enableDebug();
         $headers = $this->getHeaders();
         $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/date/" . $date->format('Y-m-d') . ".xml",
                             null, OAUTH_HTTP_METHOD_GET, $headers);
@@ -1234,19 +1233,24 @@ class FitBitPHP
      * Add subscription
      *
      * @throws FitBitException
-     * @param string $userId User id
      * @param string $id Subscription Id
      * @param string $path Subscription resource path (beginning with slash). Omit to subscribe to all user updates.
      * @return
      */
-    public function addSubscription($userId, $id, $path = null)
+    public function addSubscription($id, $path = null, $subscriberId = null)
     {
         $headers = $this->getHeaders();
+        $userHeaders = array();
+        if ($subscriberId)
+            $userHeaders['X-Fitbit-Subscriber-Id'] = $subscriberId;
+        $headers = array_merge($headers, $userHeaders);
+
+
         if (isset($path))
             $path = '/' . $path;
         else
             $path = '';
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $userId . $path . "/apiSubscriptions/" . $id . ".xml", null, OAUTH_HTTP_METHOD_POST, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-" . $path . "/apiSubscriptions/" . $id . ".xml", null, OAUTH_HTTP_METHOD_POST, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200') || !strcmp($responseInfo['http_code'], '201')) {
@@ -1262,22 +1266,43 @@ class FitBitPHP
      * Delete user subscription
      *
      * @throws FitBitException
-     * @param string $userId User id
      * @param string $id Subscription Id
      * @param string $path Subscription resource path (beginning with slash)
      * @return bool
      */
-    public function deleteSubscription($userId, $id, $path = null)
+    public function deleteSubscription($id, $path = null)
     {
         $headers = $this->getHeaders();
         if (isset($path))
             $path = '/' . $path;
         else
             $path = '';
-        $this->oauth->fetch($this->baseApiUrl . "user/" . $userId . $path . "/apiSubscriptions/" . $id . ".xml", null, OAUTH_HTTP_METHOD_DELETE, $headers);
+        $this->oauth->fetch($this->baseApiUrl . "user/-" . $path . "/apiSubscriptions/" . $id . ".xml", null, OAUTH_HTTP_METHOD_DELETE, $headers);
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
+        } else {
+            throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
+    /**
+     * Get list of user's subscriptions for this application
+     *
+     * @throws FitBitException
+     * @return
+     */
+    public function getSubscriptions()
+    {
+        $headers = $this->getHeaders();
+
+        $this->oauth->fetch($this->baseApiUrl . "user/-/apiSubscriptions.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xml = simplexml_load_string($response);
+            return $xml;
         } else {
             throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
         }
@@ -1297,6 +1322,7 @@ class FitBitPHP
     {
         $headers = $this->getHeaders();
         $headers = array_merge($headers, $userHeaders);
+
         $this->oauth->fetch($this->baseApiUrl . $url, $parameters, $method, $headers);
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();

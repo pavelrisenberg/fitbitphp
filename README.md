@@ -64,6 +64,9 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
+* Version 0.60: 11 July, 2011:
+   * API+: getSubscriptions
+   * Deprecated: addSubscription, deleteSubscription no longer accept $userId
 * Version 0.59: 29 June, 2011:
    * Bugs: bug fixes
    * Deprecated: getProfile no longer accept $userId, use setUser instead
