@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.61. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.62. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/07/14
+ * Date: 2011/07/20
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.61 ($Id$)
+ * @version 0.62 ($Id$)
  */
 
 
@@ -40,7 +40,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.61';
+    protected $userAgent = 'FitBitPHP 0.62';
     protected $debug;
 
 
@@ -1475,6 +1475,49 @@ class FitBitPHP
 
 
     /**
+     * Get CLIENT+VIEWER and CLIENT rate limiting quota status
+     *
+     * @throws FitBitException
+     * @return
+     */
+    public function getRateLimit()
+    {
+        $headers = $this->getHeaders();
+
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "account/clientAndUserRateLimitStatus.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        } catch (Exception $E) {
+        }
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xmlClientAndUser = simplexml_load_string($response);
+        } else {
+            throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
+        }
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "account/clientRateLimitStatus.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        } catch (Exception $E) {
+        }
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xmlClient = simplexml_load_string($response);
+        } else {
+            throw new FitBitException('FitBit request failed. Code: ' . $responseInfo['http_code']);
+        }
+        return new FitBitRateLimiting(
+            $xmlClientAndUser->rateLimitStatus->remainingHits,
+            $xmlClient->rateLimitStatus->remainingHits,
+            $xmlClientAndUser->rateLimitStatus->resetTime,
+            $xmlClient->rateLimitStatus->resetTime,
+            $xmlClientAndUser->rateLimitStatus->hourlyLimit,
+            $xmlClient->rateLimitStatus->hourlyLimit
+        );
+    }
+
+
+    /**
      * Make custom call to any API endpoint
      *
      * @param string $url Endpoint url after '.../1/'
@@ -1561,4 +1604,31 @@ class FitBitResponse
     }
 
 }
+
+/**
+ * Wrapper for rate limiting quota
+ *
+ */
+class FitBitRateLimiting
+{
+    public $viewer;
+    public $viewerReset;
+    public $viewerQuota;
+    public $client;
+    public $clientReset;
+    public $clientQuota;
+
+    public function __construct($viewer, $client, $viewerReset = null, $clientReset = null, $viewerQuota = null, $clientQuota = null)
+    {
+        $this->viewer = $viewer;
+        $this->viewerReset = $viewerReset;
+        $this->viewerQuota = $viewerQuota;
+        $this->client = $client;
+        $this->clientReset = $clientReset;
+        $this->clientQuota = $clientQuota;
+    }
+
+}
+
+
 

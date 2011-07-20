@@ -64,10 +64,12 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
-* Version 0.61: 14 July, 2011:
+* Version 0.62: 20 July, 2011:
+   * API+: new endpoint for rate limiting status
+
+ * Version 0.61: 14 July, 2011:
    * Improvement: new Exceptions handling
    * Deprecated: getDevice
-
 * Version 0.60: 11 July, 2011:
    * API+: getSubscriptions
    * Deprecated: addSubscription, deleteSubscription no longer accept $userId
