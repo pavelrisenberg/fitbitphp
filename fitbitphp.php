@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.62. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.63. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/07/20
+ * Date: 2011/07/22
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.62 ($Id$)
+ * @version 0.63 ($Id$)
  */
 
 
@@ -40,8 +40,10 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.62';
+    protected $userAgent = 'FitBitPHP 0.63';
     protected $debug;
+
+    protected $clientDebug;
 
 
     /**
@@ -53,6 +55,9 @@ class FitBitPHP
     public function __construct($consumer_key, $consumer_secret, $debug = 1, $userAgent = null)
     {
         $this->initUrls();
+
+        $this->consumer_key = $consumer_key;
+        $this->consumer_secret = $consumer_secret;
 
         $this->oauth = new OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
 
@@ -82,11 +87,19 @@ class FitBitPHP
 
 
     /**
-     * @return OAuth debugInfo object. Debug should be enabled in __construct
+     * @return OAuth debugInfo object for previous call. Debug should be enabled in __construct
      */
     public function oauthDebug()
     {
         return $this->oauth->debugInfo;
+    }
+
+    /**
+     * @return OAuth debugInfo object for previous client_customCall. Debug should be enabled in __construct
+     */
+    public function client_oauthDebug()
+    {
+        return $this->clientDebug;
     }
 
 
@@ -1537,6 +1550,36 @@ class FitBitPHP
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
+        return new FitBitResponse($response, $responseInfo['http_code']);
+    }
+
+
+    /**
+     * Make custom call to any API endpoint, signed with consumer_key only (on behalf of CLIENT)
+     *
+     * @param string $url Endpoint url after '.../1/'
+     * @param array $parameters Request parameters
+     * @param string $method (OAUTH_HTTP_METHOD_GET, OAUTH_HTTP_METHOD_POST, OAUTH_HTTP_METHOD_PUT, OAUTH_HTTP_METHOD_DELETE)
+     * @param array $userHeaders Additional custom headers
+     * @return FitBitResponse
+     */
+    public function client_customCall($url, $parameters, $method, $userHeaders = array())
+    {
+        $OAuthConsumer = new OAuth($this->consumer_key, $this->consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
+
+        if ($debug)
+            $OAuthConsumer->enableDebug();
+
+        $headers = $this->getHeaders();
+        $headers = array_merge($headers, $userHeaders);
+
+        try {
+            $OAuthConsumer->fetch($this->baseApiUrl . $url, $parameters, $method, $headers);
+        } catch (Exception $E) {
+        }
+        $response = $OAuthConsumer->getLastResponse();
+        $responseInfo = $OAuthConsumer->getLastResponseInfo();
+        $this->clientDebug = $OAuthConsumer->debugInfo;
         return new FitBitResponse($response, $responseInfo['http_code']);
     }
 
