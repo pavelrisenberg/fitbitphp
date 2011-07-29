@@ -64,9 +64,11 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
+* Version 0.64: 29 July, 2011:
+   * Bugs: minor bug fixes to put this thing together
+
 * Version 0.63: 22 July, 2011:
    * API+: new method client_customCall to make requests on behalf of consumer_key only
-
 * Version 0.62: 20 July, 2011:
    * API+: new endpoint for rate limiting status
 * Version 0.61: 14 July, 2011:
