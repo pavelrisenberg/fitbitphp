@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.64. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.65. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/07/29
+ * Date: 2011/08/04
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.64 ($Id$)
+ * @version 0.65 ($Id$)
  */
 
 
@@ -40,7 +40,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.64';
+    protected $userAgent = 'FitBitPHP 0.65';
     protected $debug;
 
     protected $clientDebug;
@@ -69,22 +69,54 @@ class FitBitPHP
             $this->oauth->enableDebug();
     }
 
-    public function setEndpointBase($apiHost, $authHost)
+
+    /**
+     * @param string $consumer_key Application consumer key for FitBit API
+     * @param string $consumer_secret Application secret
+     */
+    public function reinit($consumer_key, $consumer_secret)
+    {
+
+        $this->consumer_key = $consumer_key;
+        $this->consumer_secret = $consumer_secret;
+
+        $this->oauth = new OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
+
+        if ($debug)
+            $this->oauth->enableDebug();
+    }
+
+
+    /**
+     * @param string $apiHost API host, i.e. api.fitbit.com (do you know any others?)
+     * @param string $authHost Auth host, i.e. www.fitbit.com
+     */
+    public function setEndpointBase($apiHost, $authHost, $https = true, $httpsApi = false)
     {
         $this->apiHost = $apiHost;
         $this->authHost = $authHost;
 
-        $this->initUrls();
+        $this->initUrls($https, $httpsApi);
     }
 
-    private function initUrls()
+    private function initUrls($https = true, $httpsApi = false)
     {
-        $this->baseApiUrl = 'http://' . $this->apiHost . '/1/';
-        $this->authUrl = 'https://' . $this->authHost . '/oauth/authorize';
-        $this->requestTokenUrl = 'https://' . $this->apiHost . '/oauth/request_token';
-        $this->accessTokenUrl = 'https://' . $this->apiHost . '/oauth/access_token';
-    }
 
+        if ($httpsApi)
+            $this->baseApiUrl = 'https://' . $this->apiHost . '/1/';
+        else
+            $this->baseApiUrl = 'http://' . $this->apiHost . '/1/';
+
+        if ($https) {
+            $this->authUrl = 'https://' . $this->authHost . '/oauth/authorize';
+            $this->requestTokenUrl = 'https://' . $this->apiHost . '/oauth/request_token';
+            $this->accessTokenUrl = 'https://' . $this->apiHost . '/oauth/access_token';
+        } else {
+            $this->authUrl = 'http://' . $this->authHost . '/oauth/authorize';
+            $this->requestTokenUrl = 'http://' . $this->apiHost . '/oauth/request_token';
+            $this->accessTokenUrl = 'http://' . $this->apiHost . '/oauth/access_token';
+        }
+    }
 
     /**
      * @return OAuth debugInfo object for previous call. Debug should be enabled in __construct
@@ -316,14 +348,17 @@ class FitBitPHP
      *
      * @throws FitBitException
      * @param  DateTime $date
+     * @param  String $dateStr
      * @return SimpleXMLElement
      */
-    public function getActivities($date)
+    public function getActivities($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
-
+        if (is_empty($dateStr)) {
+            $dateStr = $date->format('Y-m-d');
+        }
         try {
-            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/date/" . $date->format('Y-m-d') . ".xml",
+            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/date/" . $dateStr . ".xml",
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
         } catch (Exception $E) {
         }
@@ -571,13 +606,17 @@ class FitBitPHP
      *
      * @throws FitBitException
      * @param  DateTime $date
+     * @param  String $dateStr
      * @return SimpleXMLElement
      */
-    public function getFoods($date)
+    public function getFoods($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
+        if (is_empty($dateStr)) {
+            $dateStr = $date->format('Y-m-d');
+        }
         try {
-            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/date/" . $date->format('Y-m-d') . ".xml",
+            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/date/" . $dateStr . ".xml",
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
         } catch (Exception $E) {
         }
@@ -889,13 +928,17 @@ class FitBitPHP
      *
      * @throws FitBitException
      * @param  DateTime $date
+     * @param  String $dateStr
      * @return SimpleXMLElement
      */
-    public function getWater($date)
+    public function getWater($date, $dateStr)
     {
         $headers = $this->getHeaders();
+        if (is_empty($dateStr)) {
+            $dateStr = $date->format('Y-m-d');
+        }
         try {
-            $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water/date/" . $date->format('Y-m-d') . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+            $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water/date/" . $dateStr . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
         } catch (Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
@@ -979,13 +1022,17 @@ class FitBitPHP
      *
      * @throws FitBitException
      * @param  DateTime $date
+     * @param  String $dateStr
      * @return SimpleXMLElement
      */
-    public function getSleep($date)
+    public function getSleep($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
+        if (is_empty($dateStr)) {
+            $dateStr = $date->format('Y-m-d');
+        }
         try {
-            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/sleep/date/" . $date->format('Y-m-d') . ".xml",
+            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/sleep/date/" . $dateStr . ".xml",
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
         } catch (Exception $E) {
         }
@@ -1066,13 +1113,17 @@ class FitBitPHP
      *
      * @throws FitBitException
      * @param  DateTime $date
+     * @param  String $dateStr
      * @return SimpleXMLElement
      */
-    public function getBody($date)
+    public function getBody($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
+        if (is_empty($dateStr)) {
+            $dateStr = $date->format('Y-m-d');
+        }
         try {
-            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/date/" . $date->format('Y-m-d') . ".xml",
+            $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/date/" . $dateStr . ".xml",
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
         } catch (Exception $E) {
         }
