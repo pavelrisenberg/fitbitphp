@@ -354,7 +354,7 @@ class FitBitPHP
     public function getActivities($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
-        if (is_empty($dateStr)) {
+        if (!isset($dateStr)) {
             $dateStr = $date->format('Y-m-d');
         }
         try {
@@ -612,7 +612,7 @@ class FitBitPHP
     public function getFoods($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
-        if (is_empty($dateStr)) {
+        if (!isset($dateStr)) {
             $dateStr = $date->format('Y-m-d');
         }
         try {
@@ -934,7 +934,7 @@ class FitBitPHP
     public function getWater($date, $dateStr)
     {
         $headers = $this->getHeaders();
-        if (is_empty($dateStr)) {
+        if (!isset($dateStr)) {
             $dateStr = $date->format('Y-m-d');
         }
         try {
@@ -1028,7 +1028,7 @@ class FitBitPHP
     public function getSleep($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
-        if (is_empty($dateStr)) {
+        if (!isset($dateStr)) {
             $dateStr = $date->format('Y-m-d');
         }
         try {
@@ -1119,7 +1119,7 @@ class FitBitPHP
     public function getBody($date, $dateStr = null)
     {
         $headers = $this->getHeaders();
-        if (is_empty($dateStr)) {
+        if (!isset($dateStr)) {
             $dateStr = $date->format('Y-m-d');
         }
         try {
