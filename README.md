@@ -64,6 +64,9 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
+* Version 0.66: 06 September, 2011:
+   * API+: support for creating custom activities in logActivity
+   * API+: support for creating orphan log entries in logFood
 * Version 0.65: 04 August, 2011:
    * Bugs: minor bug fixes to put this thing together
 * Version 0.64: 29 July, 2011:

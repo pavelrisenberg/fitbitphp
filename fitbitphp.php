@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.65. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.66. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/08/04
+ * Date: 2011/09/06
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.65 ($Id$)
+ * @version 0.66 ($Id$)
  */
 
 
@@ -40,7 +40,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.65';
+    protected $userAgent = 'FitBitPHP 0.66';
     protected $debug;
 
     protected $clientDebug;
@@ -488,7 +488,7 @@ class FitBitPHP
      * @param string $distanceUnit Distance unit string (see http://wiki.fitbit.com/display/API/API-Distance-Unit)
      * @return bool
      */
-    public function logActivity($date, $activityId, $duration, $calories = null, $distance = null, $distanceUnit = null)
+    public function logActivity($date, $activityId, $duration, $calories = null, $distance = null, $distanceUnit = null, $activityName = null)
     {
         $distanceUnits = array('Centimeter', 'Foot', 'Inch', 'Kilometer', 'Meter', 'Mile', 'Millimeter', 'Steps', 'Yards');
 
@@ -496,10 +496,15 @@ class FitBitPHP
         $parameters = array();
         $parameters['date'] = $date->format('Y-m-d');
         $parameters['startTime'] = $date->format('H:i');
-        $parameters['activityId'] = $activityId;
-        $parameters['durationMillis'] = $duration;
-        if (isset($calories))
+        if (isset($activityName)) {
+            $parameters['activityName'] = $activityName;
             $parameters['manualCalories'] = $calories;
+        } else {
+            $parameters['activityId'] = $activityId;
+            if (isset($calories))
+                $parameters['manualCalories'] = $calories;
+        }
+        $parameters['durationMillis'] = $duration;
         if (isset($distance))
             $parameters['distance'] = $distance;
         if (isset($distanceUnit) && in_array($distanceUnit, $distanceUnits))
@@ -719,12 +724,24 @@ class FitBitPHP
      * @param string $amount Amount in specified units
      * @return bool
      */
-    public function logFood($date, $foodId, $mealTypeId, $unitId, $amount)
+    public function logFood($date, $foodId, $mealTypeId, $unitId, $amount, $foodName = null, $calories = null, $brandName = null, $nutrition = null)
     {
         $headers = $this->getHeaders();
         $parameters = array();
         $parameters['date'] = $date->format('Y-m-d');
-        $parameters['foodId'] = $foodId;
+        if (isset($foodName)) {
+            $parameters['foodName'] = $foodName;
+            $parameters['calories'] = $calories;
+            if (isset($brandName))
+                $parameters['brandName'] = $brandName;
+            if (isset($nutrition)) {
+                foreach ($nutrition as $i => $value) {
+                    $parameters[$i] = $nutrition[$i];
+                }
+            }
+        } else {
+            $parameters['foodId'] = $foodId;
+        }
         $parameters['mealTypeId'] = $mealTypeId;
         $parameters['unitId'] = $unitId;
         $parameters['amount'] = $amount;
