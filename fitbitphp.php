@@ -1,6 +1,6 @@
 <?php
 /**
- * FitBitPHP v.0.66. Basic FitBit API wrapper for PHP using OAuth
+ * FitBitPHP v.0.67. Basic FitBit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/09/06
+ * Date: 2011/09/19
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.66 ($Id$)
+ * @version 0.67 ($Id$)
  */
 
 
@@ -40,7 +40,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitBitPHP 0.66';
+    protected $userAgent = 'FitBitPHP 0.67';
     protected $debug;
 
     protected $clientDebug;
@@ -140,7 +140,7 @@ class FitBitPHP
      *
      * @return int (0 - no session, 1 - just after successful authorization, 2 - session exist)
      */
-    public function sessionStatus()
+    public static function sessionStatus()
     {
         $session = session_id();
         if (empty($session)) {
@@ -876,6 +876,32 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "foods/search.xml?query=" . rawurlencode($query), null, OAUTH_HTTP_METHOD_GET, $headers);
+        } catch (Exception $E) {
+        }
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xml = simplexml_load_string($response);
+            return $xml;
+        } else {
+            throw new FitBitException($responseInfo['http_code'], 'FitBit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
+    /**
+     * Get description of specific food from food db (or private for the user)
+     *
+     * @throws FitBitException
+     * @param  string $id Food Id
+     * @return SimpleXMLElement
+     */
+    public function getFood($id)
+    {
+        $headers = $this->getHeaders();
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "foods/" . $id . ".xml", null,
+                                OAUTH_HTTP_METHOD_GET, $headers);
         } catch (Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
