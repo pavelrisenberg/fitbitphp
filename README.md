@@ -64,6 +64,9 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
+* Version 0.68: 17 OCtober, 2011:
+   * Bugs: minor bugfixes to put this thing together
+   * API+: new getTimeSeries resources for Fitbit Ultra
 * Version 0.67: 19 September, 2011:
    * API+: getFood
 * Version 0.66: 06 September, 2011:
