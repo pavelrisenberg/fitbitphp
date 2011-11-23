@@ -64,7 +64,14 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
-* Version 0.68: 17 OCtober, 2011:
+* Version 0.69: 23 November, 2011:
+   * API+: getBloodPressure, logBloodPressure, deleteBloodPressure (BP logging)
+   * API+: getGlucose, logGlucose (Glucose logging)
+   * API+: activityStats (Lifetime achievements)
+   * API+: browseActivities (Activities catalog)
+   * API+: Additional resources in getTimeSeries (sleep and water)
+   * Improvement: invalid XML responses handling
+* Version 0.68: 17 October, 2011:
    * Bugs: minor bugfixes to put this thing together
    * API+: new getTimeSeries resources for Fitbit Ultra
 * Version 0.67: 19 September, 2011:
