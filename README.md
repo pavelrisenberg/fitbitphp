@@ -64,6 +64,9 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
+* Version 0.70: 09 December, 2011:
+   * API+: getHeartRate, logHeartRate, deleteHeartRate (Heart logging)
+   * API+: Additional resources in getTimeSeries (clean activities from the Tracker)
 * Version 0.69: 23 November, 2011:
    * API+: getBloodPressure, logBloodPressure, deleteBloodPressure (BP logging)
    * API+: getGlucose, logGlucose (Glucose logging)

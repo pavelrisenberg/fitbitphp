@@ -1,6 +1,6 @@
 <?php
 /**
- * FitbitPHP v.0.69. Basic Fitbit API wrapper for PHP using OAuth
+ * FitbitPHP v.0.70. Basic Fitbit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2011/11/23
+ * Date: 2011/12/09
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.69 ($Id$)
+ * @version 0.70 ($Id$)
  */
 
 
@@ -40,7 +40,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitbitPHP 0.69';
+    protected $userAgent = 'FitbitPHP 0.70';
     protected $debug;
 
     protected $clientDebug;
@@ -1596,6 +1596,105 @@ class FitBitPHP
 
 
     /**
+     * Get user heart rate log entries for specific date
+     *
+     * @throws FitBitException
+     * @param  DateTime $date
+     * @param  String $dateStr
+     * @return SimpleXMLElement
+     */
+    public function getHeartRate($date, $dateStr)
+    {
+        $headers = $this->getHeaders();
+        if (!isset($dateStr)) {
+            $dateStr = $date->format('Y-m-d');
+        }
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "user/-/heart/date/" . $dateStr . ".xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        } catch (Exception $E) {
+        }
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xml = simplexml_load_string($response);
+            if ($xml)
+                return $xml;
+            else
+                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        } else {
+            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
+    /**
+     * Log user heart rate
+     *
+     * @throws FitBitException
+     * @param DateTime $date Log entry date (set proper timezone, which could be fetched via getProfile)
+     * @param string $tracker Name of the glucose tracker
+     * @param string $heartRate Heart rate measurement
+     * @param DateTime $time Time of the measurement (set proper timezone, which could be fetched via getProfile)
+     * @return SimpleXMLElement
+     */
+    public function logHeartRate($date, $tracker, $heartRate, $time = null)
+    {
+        $headers = $this->getHeaders();
+        $parameters = array();
+        $parameters['date'] = $date->format('Y-m-d');
+        $parameters['tracker'] = $tracker;
+        $parameters['heartRate'] = $heartRate;
+        if (isset($time))
+            $parameters['time'] = $time->format('H:i');
+
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "user/-/heart.xml", $parameters,
+                                OAUTH_HTTP_METHOD_POST, $headers);
+        } catch (Exception $E) {
+        }
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '201')) {
+            $xml = simplexml_load_string($response);
+            if ($xml)
+                return $xml;
+            else
+                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        } else {
+            $xml = simplexml_load_string($response);
+            if (!$xml)
+                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            else
+                throw new FitBitException($responseInfo['http_code'], $xml->errors->apiError->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
+    /**
+     * Delete user heart rate record
+     *
+     * @throws FitBitException
+     * @param string $id Heart rate log id
+     * @return bool
+     */
+    public function deleteHeartRate($id)
+    {
+        $headers = $this->getHeaders();
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "user/-/heart/" . $id . ".xml", null,
+                                OAUTH_HTTP_METHOD_DELETE, $headers);
+        } catch (Exception $E) {
+        }
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '204')) {
+            return true;
+        } else {
+            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
+    /**
      * Launch TimeSeries requests
      *
      * Allowed types are:
@@ -1604,6 +1703,9 @@ class FitBitPHP
      *            'caloriesOut', 'steps', 'distance', 'floors', 'elevation'
      *            'minutesSedentary', 'minutesLightlyActive', 'minutesFairlyActive', 'minutesVeryActive',
      *            'activeScore', 'activityCalories',
+     *
+     *            'tracker_caloriesOut', 'tracker_steps', 'tracker_distance', 'tracker_floors', 'tracker_elevation'
+     *            'tracker_activeScore'
      *
      *            'startTime', 'timeInBed', 'minutesAsleep', 'minutesAwake', 'awakeningsCount',
      *            'minutesToFallAsleep', 'minutesAfterWakeup',
@@ -1660,6 +1762,25 @@ class FitBitPHP
                 break;
             case 'activityCalories':
                 $path = '/activities/log/activityCalories';
+                break;
+
+            case 'tracker_caloriesOut':
+                $path = '/activities/log/tracker/calories';
+                break;
+            case 'tracker_steps':
+                $path = '/activities/log/tracker/steps';
+                break;
+            case 'tracker_distance':
+                $path = '/activities/log/tracker/distance';
+                break;
+            case 'tracker_floors':
+                $path = '/activities/log/tracker/floors';
+                break;
+            case 'tracker_elevation':
+                $path = '/activities/log/tracker/elevation';
+                break;
+            case 'tracker_activeScore':
+                $path = '/activities/log/tracker/activeScore';
                 break;
 
             case 'startTime':
