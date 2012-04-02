@@ -42,7 +42,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitbitPHP 0.70';
+    protected $userAgent = 'FitbitPHP 0.71';
     protected $debug;
 
     protected $clientDebug;
@@ -1909,7 +1909,7 @@ class FitBitPHP
      * @param  $date DateTime or 'today'
      * @param  $start_time DateTime
      * @param  $end_time DateTime
-     * @return array
+     * @return object
      */
     public function getIntradayTimeSeries($type, $date, $start_time = null, $end_time = null)
     {
@@ -1942,7 +1942,7 @@ class FitBitPHP
         if (!strcmp($responseInfo['http_code'], '200')) {
             $json = json_decode($response);
             $path = str_replace('/', '-', substr($path, 1)) . "-intraday";
-            return $json->$path;
+            return (isset($json->$path)) ? $json->$path : NULL;
         } else {
             throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
@@ -2247,7 +2247,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
 
         try {
-            $this->oauth->fetch($this->baseApiUrl . "user/-/apiSubscriptions."$response = $this->parseResponse($response);, null, OAUTH_HTTP_METHOD_GET, $headers);
+            $this->oauth->fetch($this->baseApiUrl . "user/-/apiSubscriptions." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
         } catch (Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
