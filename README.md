@@ -64,64 +64,70 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
+* Version 0.71: 02 April, 2012:
+	* API+: getIntradayTimeSeries
+    * API+: setResponseFormat
+	* Improvement: support for json response format
+    * Bugs: default parameters for getWater and getHeartRate
+	* Bugs: minor bugfixes to put this thing together
 * Version 0.70: 09 December, 2011:
-   * API+: getHeartRate, logHeartRate, deleteHeartRate (Heart logging)
-   * API+: Additional resources in getTimeSeries (clean activities from the Tracker)
+    * API+: getHeartRate, logHeartRate, deleteHeartRate (Heart logging)
+    * API+: Additional resources in getTimeSeries (clean activities from the Tracker)
 * Version 0.69: 23 November, 2011:
-   * API+: getBloodPressure, logBloodPressure, deleteBloodPressure (BP logging)
-   * API+: getGlucose, logGlucose (Glucose logging)
-   * API+: activityStats (Lifetime achievements)
-   * API+: browseActivities (Activities catalog)
-   * API+: Additional resources in getTimeSeries (sleep and water)
-   * Improvement: invalid XML responses handling
+    * API+: getBloodPressure, logBloodPressure, deleteBloodPressure (BP logging)
+    * API+: getGlucose, logGlucose (Glucose logging)
+    * API+: activityStats (Lifetime achievements)
+    * API+: browseActivities (Activities catalog)
+    * API+: Additional resources in getTimeSeries (sleep and water)
+    * Improvement: invalid XML responses handling
 * Version 0.68: 17 October, 2011:
-   * Bugs: minor bugfixes to put this thing together
-   * API+: new getTimeSeries resources for Fitbit Ultra
+    * Bugs: minor bugfixes to put this thing together
+    * API+: new getTimeSeries resources for Fitbit Ultra
 * Version 0.67: 19 September, 2011:
-   * API+: getFood
+    * API+: getFood
 * Version 0.66: 06 September, 2011:
-   * API+: support for creating custom activities in logActivity
-   * API+: support for creating orphan log entries in logFood
+    * API+: support for creating custom activities in logActivity
+    * API+: support for creating orphan log entries in logFood
 * Version 0.65: 04 August, 2011:
-   * Bugs: minor bug fixes to put this thing together
+    * Bugs: minor bug fixes to put this thing together
 * Version 0.64: 29 July, 2011:
-   * Bugs: minor bug fixes to put this thing together
+    * Bugs: minor bug fixes to put this thing together
 * Version 0.63: 22 July, 2011:
-   * API+: new method client_customCall to make requests on behalf of consumer_key only
+    * API+: new method client_customCall to make requests on behalf of consumer_key only
 * Version 0.62: 20 July, 2011:
-   * API+: new endpoint for rate limiting status
+    * API+: new endpoint for rate limiting status
 * Version 0.61: 14 July, 2011:
-   * Improvement: new Exceptions handling
-   * Deprecated: getDevice
+    * Improvement: new Exceptions handling
+    * Deprecated: getDevice
 * Version 0.60: 11 July, 2011:
-   * API+: getSubscriptions
-   * Deprecated: addSubscription, deleteSubscription no longer accept $userId
+    * API+: getSubscriptions
+    * Deprecated: addSubscription, deleteSubscription no longer accept $userId
 * Version 0.59: 29 June, 2011:
-   * Bugs: bug fixes
-   * Deprecated: getProfile no longer accept $userId, use setUser instead
+    * Bugs: bug fixes
+    * Deprecated: getProfile no longer accept $userId, use setUser instead
 * Version 0.58: 23 June, 2011:
-   * API+: getWater, logWater, deleteWater
-   * API+: getSleep, logSleep, deleteSleep
+    * API+: getWater, logWater, deleteWater
+    * API+: getSleep, logSleep, deleteSleep
 * Version 0.57: 06 June, 2011:
-   * API+: createFood
-   * API+: updateProfile
-   * API+: getFriends
-   * API+: getFriendsLeaderboard
-   * API+: inviteFriend, acceptFriend, rejectFriend
-   * Bug: now all calls during OAuth handshake are made through https
-   * Bug: en_GB unit system
+    * API+: createFood
+    * API+: updateProfile
+    * API+: getFriends
+    * API+: getFriendsLeaderboard
+    * API+: inviteFriend, acceptFriend, rejectFriend
+    * Bug: now all calls during OAuth handshake are made through https
+    * Bug: en_GB unit system
 * Version 0.56: 29 May, 2011:
-   * Bug: Search-Foods
-   * API+: Added getMeals endpoint to fetch meal sets
+    * Bug: Search-Foods
+    * API+: Added getMeals endpoint to fetch meal sets
 * Version 0.55: 22 May, 2011:
-   * Update: Update to reflect new document format in Time-Series
+    * Update: Update to reflect new document format in Time-Series
 * Version 0.54: 29 April, 2011:
-   * API+: Added getBody endpoint for body measurements
+    * API+: Added getBody endpoint for body measurements
 * Version 0.53: 26 April, 2011:
-   * Bug: Correct path for getActivity endpoint
+    * Bug: Correct path for getActivity endpoint
 * Version 0.52: 14 April, 2011:
-   * Bug: Added X-Fitbit-Client-Version header as a workaround for Fitbit API unit system bug
+    * Bug: Added X-Fitbit-Client-Version header as a workaround for Fitbit API unit system bug
 * Version 0.51: 04 April, 2011:
-   * API+: Added manualCalories and distanceUnit to logActivity()
+    * API+: Added manualCalories and distanceUnit to logActivity()
 * Version 0.5: 29 March, 2011:
-   * Initial commit
+    * Initial commit
