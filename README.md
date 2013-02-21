@@ -20,7 +20,7 @@ Example snippet on frontend could look like:
 
     <?php
 
-    require 'fitbitphp.php'
+    require 'fitbitphp.php';
 
     $fitbit = new FitBitPHP(FITBIT_KEY, FITBIT_SECRET);
 
@@ -37,7 +37,7 @@ Note, that unconditional call to 'initSession' in each page will completely hide
 
 Second, if you want to implement some API calls on user's behalf later (say daemon with no frontend), when you've already stored OAuth credentials somewhere, you could do exactly that:
 
-    require 'fitbitphp.php'
+    require 'fitbitphp.php';
 
     $fitbit = new FitBitPHP(FITBIT_KEY, FITBIT_SECRET);
     $fitbit->setOAuthDetails('token_stored_for_user', 'secret_stored_for_user');
@@ -51,7 +51,7 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 If you want to fetch data without complete OAuth workflow, only using consumer_key without access_token, you can do that also (check which endpoints are okey with such calls on Fitbit API documentation):
 
-    require 'fitbitphp.php'
+    require 'fitbitphp.php';
 
     $fitbit = new FitBitPHP(FITBIT_KEY, FITBIT_SECRET);
 
