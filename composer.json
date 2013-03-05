@@ -6,7 +6,7 @@
     "keywords": ["fitbit"],
     "homepage": "https://github.com/heyitspavel/fitbitphp",
     "require": {
-        "php": ">=5.3.2",
+        "php": ">=5.3.2"
     },
     "autoload": {
         "psr-0": {
