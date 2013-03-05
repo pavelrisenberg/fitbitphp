@@ -1,0 +1,16 @@
+{
+    "name": "thesavior/fitbitphp",
+    "version": "0.5",
+    "type": "library",
+    "description": "Fitbit library with OAuth",
+    "keywords": ["fitbit"],
+    "homepage": "https://github.com/heyitspavel/fitbitphp",
+    "require": {
+        "php": ">=5.3.2",
+    },
+    "autoload": {
+        "psr-0": {
+            "FitBit": "lib/"
+        }
+    }
+}
