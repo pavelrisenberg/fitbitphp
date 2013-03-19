@@ -1,5 +1,5 @@
 {
-    "name": "thesavior/fitbitphp",
+    "name": "heyitspavel/fitbitphp",
     "version": "0.5",
     "type": "library",
     "description": "Fitbit library with OAuth",
