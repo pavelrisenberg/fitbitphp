@@ -12,9 +12,9 @@
  * Requires OAuth 1.0.0, SimpleXML
  * @version 0.71 ($Id$)
  */
+namespace FitBit;
 
-
-class FitBitPHP
+class FitBit
 {
 
     /**
@@ -61,7 +61,7 @@ class FitBitPHP
 
         $this->consumer_key = $consumer_key;
         $this->consumer_secret = $consumer_secret;
-        $this->oauth = new OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
+        $this->oauth = new \OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
 
         $this->debug = $debug;
         if ($debug)
@@ -84,7 +84,7 @@ class FitBitPHP
         $this->consumer_key = $consumer_key;
         $this->consumer_secret = $consumer_secret;
 
-        $this->oauth = new OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
+        $this->oauth = new \OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
 
         if ($this->debug)
             $this->oauth->enableDebug();
@@ -300,7 +300,7 @@ class FitBitPHP
     /**
      * Get user profile
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $userId UserId of public profile, if none using set with setUser or '-' by default
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
@@ -310,7 +310,7 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/profile." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -320,9 +320,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -330,7 +330,7 @@ class FitBitPHP
     /**
      * Update user profile
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $gender 'FEMALE', 'MALE' or 'NA'
      * @param DateTime $birthday Date of birth
      * @param string $height Height in cm/inches (as set with setMetric)
@@ -359,7 +359,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/profile." . $this->responseFormat,
                                 $parameters, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -370,14 +370,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);                
+                throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);                
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new \Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -385,7 +385,7 @@ class FitBitPHP
     /**
      * Get user activities for specific date
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -399,7 +399,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities/date/" . $dateStr . "." . $this->responseFormat,
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -410,9 +410,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -420,7 +420,7 @@ class FitBitPHP
     /**
      * Get user recent activities
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getRecentActivities()
@@ -429,7 +429,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/activities/recent." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -439,9 +439,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -449,7 +449,7 @@ class FitBitPHP
     /**
      * Get user frequent activities
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getFrequentActivities()
@@ -458,7 +458,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/activities/frequent." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -468,9 +468,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new \Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -478,7 +478,7 @@ class FitBitPHP
     /**
      * Get user favorite activities
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getFavoriteActivities()
@@ -487,7 +487,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/activities/favorite." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -497,9 +497,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -507,7 +507,7 @@ class FitBitPHP
     /**
      * Log user activity
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param DateTime $date Activity date and time (set proper timezone, which could be fetched via getProfile)
      * @param string $activityId Activity Id (or Intensity Level Id) from activities database,
      *                                  see http://wiki.fitbit.com/display/API/API-Log-Activity
@@ -542,7 +542,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/activities." . $this->responseFormat, $parameters,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -553,14 +553,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -568,7 +568,7 @@ class FitBitPHP
     /**
      * Delete user activity
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Activity log id
      * @return bool
      */
@@ -579,14 +579,14 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/activities/" . $id . ".xml", null,
                                 OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -594,7 +594,7 @@ class FitBitPHP
     /**
      * Add user favorite activity
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Activity log id
      * @return bool
      */
@@ -604,14 +604,14 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/activities/log/favorite/" . $id . "." . $this->responseFormat,
                                 null, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -619,7 +619,7 @@ class FitBitPHP
     /**
      * Delete user favorite activity
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Activity log id
      * @return bool
      */
@@ -629,13 +629,13 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/activities/log/favorite/" . $id . ".xml",
                                 null, OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -643,7 +643,7 @@ class FitBitPHP
     /**
      * Get full description of specific activity
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  string $id Activity log Id
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
@@ -653,7 +653,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "activities/" . $id . "." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -663,9 +663,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -673,7 +673,7 @@ class FitBitPHP
     /**
      * Get a tree of all valid Fitbit public activities as well as private custom activities the user createds
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function browseActivities()
@@ -682,7 +682,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "activities." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -692,9 +692,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -702,7 +702,7 @@ class FitBitPHP
     /**
      * Get user foods for specific date
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -716,7 +716,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/foods/log/date/" . $dateStr . "." . $this->responseFormat,
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -727,9 +727,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -737,7 +737,7 @@ class FitBitPHP
     /**
      * Get user recent foods
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getRecentFoods()
@@ -746,7 +746,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/recent." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -757,9 +757,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -767,7 +767,7 @@ class FitBitPHP
     /**
      * Get user frequent foods
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getFrequentFoods()
@@ -776,7 +776,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/frequent." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -786,9 +786,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -796,7 +796,7 @@ class FitBitPHP
     /**
      * Get user favorite foods
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getFavoriteFoods()
@@ -805,7 +805,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/favorite." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -815,9 +815,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -825,7 +825,7 @@ class FitBitPHP
     /**
      * Log user food
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param DateTime $date Food log date
      * @param string $foodId Food Id from foods database (see searchFoods)
      * @param string $mealTypeId Meal Type Id from foods database (see searchFoods)
@@ -858,7 +858,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log." . $this->responseFormat, $parameters,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -868,14 +868,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -883,7 +883,7 @@ class FitBitPHP
     /**
      * Delete user food
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Food log id
      * @return bool
      */
@@ -894,14 +894,14 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/" . $id . ".xml", null,
                                 OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -909,7 +909,7 @@ class FitBitPHP
     /**
      * Add user favorite food
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Food log id
      * @return bool
      */
@@ -920,13 +920,13 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/favorite/" . $id . "." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -934,7 +934,7 @@ class FitBitPHP
     /**
      * Delete user favorite food
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Food log id
      * @return bool
      */
@@ -944,13 +944,13 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/favorite/" . $id . ".xml",
                                 null, OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -958,7 +958,7 @@ class FitBitPHP
     /**
      * Get user meal sets
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getMeals()
@@ -967,7 +967,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/meals." . $this->responseFormat,
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -977,9 +977,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -987,7 +987,7 @@ class FitBitPHP
     /**
      * Get food units library
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getFoodUnits()
@@ -995,7 +995,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "foods/units." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1005,9 +1005,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1015,7 +1015,7 @@ class FitBitPHP
     /**
      * Search for foods in foods database
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $query Search query
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
@@ -1024,7 +1024,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "foods/search." . $this->responseFormat . "?query=" . rawurlencode($query), null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1034,9 +1034,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1044,7 +1044,7 @@ class FitBitPHP
     /**
      * Get description of specific food from food db (or private for the user)
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  string $id Food Id
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
@@ -1054,7 +1054,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "foods/" . $id . "." . $this->responseFormat, null,
                                 OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1064,9 +1064,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1074,7 +1074,7 @@ class FitBitPHP
     /**
      * Create private foods for a user
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $name Food name
      * @param string $defaultFoodMeasurementUnitId Unit id of the default measurement unit
      * @param string $defaultServingSize Default serving size in measurement units
@@ -1104,7 +1104,7 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "foods." . $this->responseFormat, $parameters, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1114,13 +1114,13 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
             if (!$xml)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1128,7 +1128,7 @@ class FitBitPHP
     /**
      * Get user water log entries for specific date
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -1141,7 +1141,7 @@ class FitBitPHP
         }
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water/date/" . $dateStr . "." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1151,9 +1151,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1161,7 +1161,7 @@ class FitBitPHP
     /**
      * Log user water
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param DateTime $date Log entry date (set proper timezone, which could be fetched via getProfile)
      * @param string $amount Amount in ml/fl oz (as set with setMetric) or waterUnit
      * @param string $waterUnit Water Unit ("ml", "fl oz" or "cup")
@@ -1181,7 +1181,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water." . $this->responseFormat, $parameters,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1191,14 +1191,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1206,7 +1206,7 @@ class FitBitPHP
     /**
      * Delete user water record
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Water log id
      * @return bool
      */
@@ -1216,13 +1216,13 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/foods/log/water/" . $id . ".xml", null,
                                 OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1230,7 +1230,7 @@ class FitBitPHP
     /**
      * Get user sleep log entries for specific date
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -1244,7 +1244,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/sleep/date/" . $dateStr . "." . $this->responseFormat,
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1254,9 +1254,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1264,7 +1264,7 @@ class FitBitPHP
     /**
      * Log user sleep
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param DateTime $date Sleep date and time (set proper timezone, which could be fetched via getProfile)
      * @param string $duration Duration millis
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -1280,7 +1280,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/sleep." . $this->responseFormat, $parameters,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1290,14 +1290,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1305,7 +1305,7 @@ class FitBitPHP
     /**
      * Delete user sleep record
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Activity log id
      * @return bool
      */
@@ -1315,13 +1315,13 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/sleep/" . $id . ".xml", null,
                                 OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1329,7 +1329,7 @@ class FitBitPHP
     /**
      * Get user body measurements
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -1343,7 +1343,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/body/date/" . $dateStr . "." . $this->responseFormat,
                                 null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1353,16 +1353,16 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
     /**
      * Log user body measurements
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $weight Float number. For en_GB units, provide floating number of stones (i.e. 11 st. 4 lbs = 11.2857143)
      * @param string $fat Float number
      * @param string $bicep Float number
@@ -1407,7 +1407,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/body." . $this->responseFormat,
                                 $parameters, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -1418,14 +1418,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1433,7 +1433,7 @@ class FitBitPHP
     /**
      * Log user weight
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $weight Float number. For en_GB units, provide floating number of stones (i.e. 11 st. 4 lbs = 11.2857143)
      * @param DateTime $date If present, log entry date, now by default (set proper timezone, which could be fetched via getProfile)
      * @return bool
@@ -1449,7 +1449,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/body/weight." . $this->responseFormat,
                                 $parameters, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -1460,9 +1460,9 @@ class FitBitPHP
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1470,7 +1470,7 @@ class FitBitPHP
     /**
      * Get user blood pressure log entries for specific date
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -1483,7 +1483,7 @@ class FitBitPHP
         }
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/bp/date/" . $dateStr . "." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1493,9 +1493,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1503,7 +1503,7 @@ class FitBitPHP
     /**
      * Log user blood pressure
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param DateTime $date Log entry date (set proper timezone, which could be fetched via getProfile)
      * @param string $systolic Systolic measurement
      * @param string $diastolic Diastolic measurement
@@ -1523,7 +1523,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/bp." . $this->responseFormat, $parameters,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1533,14 +1533,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1548,7 +1548,7 @@ class FitBitPHP
     /**
      * Delete user blood pressure record
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Blood pressure log id
      * @return bool
      */
@@ -1558,13 +1558,13 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/bp/" . $id . ".xml", null,
                                 OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1572,7 +1572,7 @@ class FitBitPHP
     /**
      * Get user glucose log entries for specific date
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -1585,7 +1585,7 @@ class FitBitPHP
         }
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/glucose/date/" . $dateStr . "." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1595,16 +1595,16 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
     /**
      * Log user glucose and HbA1c
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param DateTime $date Log entry date (set proper timezone, which could be fetched via getProfile)
      * @param string $tracker Name of the glucose tracker
      * @param string $glucose Glucose measurement
@@ -1627,7 +1627,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/glucose." . $this->responseFormat, $parameters,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1637,14 +1637,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1652,7 +1652,7 @@ class FitBitPHP
     /**
      * Get user heart rate log entries for specific date
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param  DateTime $date
      * @param  String $dateStr
      * @return mixed SimpleXMLElement or the value encoded in json as an object
@@ -1665,7 +1665,7 @@ class FitBitPHP
         }
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/heart/date/" . $dateStr . "." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1675,9 +1675,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1685,7 +1685,7 @@ class FitBitPHP
     /**
      * Log user heart rate
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param DateTime $date Log entry date (set proper timezone, which could be fetched via getProfile)
      * @param string $tracker Name of the glucose tracker
      * @param string $heartRate Heart rate measurement
@@ -1705,7 +1705,7 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/heart." . $this->responseFormat, $parameters,
                                 OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1715,14 +1715,14 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1730,7 +1730,7 @@ class FitBitPHP
     /**
      * Delete user heart rate record
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Heart rate log id
      * @return bool
      */
@@ -1740,13 +1740,13 @@ class FitBitPHP
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/heart/" . $id . ".xml", null,
                                 OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1770,7 +1770,7 @@ class FitBitPHP
      *
      *            'weight', 'bmi', 'fat'
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $type
      * @param  $basedate DateTime or 'today', to_period
      * @param  $to_period DateTime or '1d, 7d, 30d, 1w, 1m, 3m, 6m, 1y, max'
@@ -1884,7 +1884,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . $path . '/date/' . (is_string($basedate) ? $basedate : $basedate->format('Y-m-d')) . "/" . (is_string($to_period) ? $to_period : $to_period->format('Y-m-d')) . ".json", null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1893,7 +1893,7 @@ class FitBitPHP
             $path = str_replace('/', '-', substr($path, 1));
             return $json->$path;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1904,7 +1904,7 @@ class FitBitPHP
      * Allowed types are:
      *            'caloriesOut', 'steps', 'floors', 'elevation'
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $type
      * @param  $date DateTime or 'today'
      * @param  $start_time DateTime
@@ -1935,7 +1935,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-" . $path . "/date/" . (is_string($date) ? $date : $date->format('Y-m-d')) . "/1d" . ((!empty($start_time) && !empty($end_time)) ? "/time/" . $start_time->format('H:i') . "/" . $end_time->format('H:i') : "") . ".json", null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1944,7 +1944,7 @@ class FitBitPHP
             $path = str_replace('/', '-', substr($path, 1)) . "-intraday";
             return (isset($json->$path)) ? $json->$path : NULL;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1952,7 +1952,7 @@ class FitBitPHP
     /**
      * Get user's activity statistics (lifetime statistics from the tracker device and total numbers including the manual activity log entries)
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getActivityStats()
@@ -1960,7 +1960,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/activities." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1970,9 +1970,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -1980,7 +1980,7 @@ class FitBitPHP
     /**
      * Get list of devices and their properties
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getDevices()
@@ -1988,7 +1988,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/devices." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -1998,16 +1998,16 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
     /**
      * Get user friends
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
     public function getFriends()
@@ -2015,7 +2015,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/" . $this->userId . "/friends." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -2025,9 +2025,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2035,7 +2035,7 @@ class FitBitPHP
     /**
      * Get user's friends leaderboard
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $period Depth ('7d' or '30d')
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
@@ -2044,7 +2044,7 @@ class FitBitPHP
         $headers = $this->getHeaders();
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/friends/leaders/" . $period . "." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -2054,9 +2054,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2064,7 +2064,7 @@ class FitBitPHP
     /**
      * Invite user to become friends
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $userId Invite user by id
      * @param string $email Invite user by email address (could be already Fitbit member or not)
      * @return bool
@@ -2080,7 +2080,7 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/friends/invitations." . $this->responseFormat, $parameters, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -2091,9 +2091,9 @@ class FitBitPHP
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2101,7 +2101,7 @@ class FitBitPHP
     /**
      * Accept invite to become friends from user
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $userId Id of the inviting user
      * @return bool
      */
@@ -2113,7 +2113,7 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/friends/invitations/" . $userId . "." . $this->responseFormat, $parameters, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -2124,9 +2124,9 @@ class FitBitPHP
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2134,7 +2134,7 @@ class FitBitPHP
     /**
      * Accept invite to become friends from user
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $userId Id of the inviting user
      * @return bool
      */
@@ -2146,7 +2146,7 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/friends/invitations/" . $userId . "." . $this->responseFormat, $parameters, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -2157,9 +2157,9 @@ class FitBitPHP
             $response = $this->parseResponse($response);
 
             if (!$response)
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
-                throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2167,7 +2167,7 @@ class FitBitPHP
     /**
      * Add subscription
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Subscription Id
      * @param string $path Subscription resource path (beginning with slash). Omit to subscribe to all user updates.
      * @return
@@ -2188,7 +2188,7 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-" . $path . "/apiSubscriptions/" . $id . "." . $this->responseFormat, null, OAUTH_HTTP_METHOD_POST, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $response = $this->oauth->getLastResponse();
@@ -2199,9 +2199,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2209,7 +2209,7 @@ class FitBitPHP
     /**
      * Delete user subscription
      *
-     * @throws FitBitException
+     * @throws Exception
      * @param string $id Subscription Id
      * @param string $path Subscription resource path (beginning with slash)
      * @return bool
@@ -2224,14 +2224,14 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-" . $path . "/apiSubscriptions/" . $id . ".xml", null, OAUTH_HTTP_METHOD_DELETE, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
 
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2239,7 +2239,7 @@ class FitBitPHP
     /**
      * Get list of user's subscriptions for this application
      *
-     * @throws FitBitException
+     * @throws Exception
      * @return
      */
     public function getSubscriptions()
@@ -2248,7 +2248,7 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/apiSubscriptions." . $this->responseFormat, null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
@@ -2258,9 +2258,9 @@ class FitBitPHP
             if ($response)
                 return $response;
             else
-                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+                throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
     }
 
@@ -2268,8 +2268,8 @@ class FitBitPHP
     /**
      * Get CLIENT+VIEWER and CLIENT rate limiting quota status
      *
-     * @throws FitBitException
-     * @return FitBitRateLimiting
+     * @throws Exception
+     * @return RateLimiting
      */
     public function getRateLimit()
     {
@@ -2277,27 +2277,27 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "account/clientAndViewerRateLimitStatus.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
             $xmlClientAndUser = simplexml_load_string($response);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
         try {
             $this->oauth->fetch($this->baseApiUrl . "account/clientRateLimitStatus.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
             $xmlClient = simplexml_load_string($response);
         } else {
-            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+            throw new Exception($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
-        return new FitBitRateLimiting(
+        return new RateLimiting(
             $xmlClientAndUser->rateLimitStatus->remainingHits,
             $xmlClient->rateLimitStatus->remainingHits,
             $xmlClientAndUser->rateLimitStatus->resetTime,
@@ -2315,7 +2315,7 @@ class FitBitPHP
      * @param array $parameters Request parameters
      * @param string $method (OAUTH_HTTP_METHOD_GET, OAUTH_HTTP_METHOD_POST, OAUTH_HTTP_METHOD_PUT, OAUTH_HTTP_METHOD_DELETE)
      * @param array $userHeaders Additional custom headers
-     * @return FitBitResponse
+     * @return Response
      */
     public function customCall($url, $parameters, $method, $userHeaders = array())
     {
@@ -2324,11 +2324,11 @@ class FitBitPHP
 
         try {
             $this->oauth->fetch($this->baseApiUrl . $url, $parameters, $method, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
-        return new FitBitResponse($response, $responseInfo['http_code']);
+        return new Response($response, $responseInfo['http_code']);
     }
 
 
@@ -2339,7 +2339,7 @@ class FitBitPHP
      * @param array $parameters Request parameters
      * @param string $method (OAUTH_HTTP_METHOD_GET, OAUTH_HTTP_METHOD_POST, OAUTH_HTTP_METHOD_PUT, OAUTH_HTTP_METHOD_DELETE)
      * @param array $userHeaders Additional custom headers
-     * @return FitBitResponse
+     * @return Response
      */
     public function client_customCall($url, $parameters, $method, $userHeaders = array())
     {
@@ -2353,12 +2353,12 @@ class FitBitPHP
 
         try {
             $OAuthConsumer->fetch($this->baseApiUrl . $url, $parameters, $method, $headers);
-        } catch (Exception $E) {
+        } catch (\Exception $E) {
         }
         $response = $OAuthConsumer->getLastResponse();
         $responseInfo = $OAuthConsumer->getLastResponseInfo();
         $this->clientDebug = print_r($OAuthConsumer->debugInfo, true);
-        return new FitBitResponse($response, $responseInfo['http_code']);
+        return new Response($response, $responseInfo['http_code']);
     }
 
 
@@ -2392,86 +2392,4 @@ class FitBitPHP
 
         return $response;
     }
-
-
-}
-
-
-/**
- * Fitbit API communication exception
- *
- */
-class FitBitException extends Exception
-{
-    public $fbMessage = '';
-    public $httpcode;
-
-    public function __construct($code, $fbMessage = null, $message = null)
-    {
-
-        $this->fbMessage = $fbMessage;
-        $this->httpcode = $code;
-
-        if (isset($fbMessage) && !isset($message))
-            $message = $fbMessage;
-
-        try {
-            $code = (int)$code;
-        } catch (Exception $E) {
-            $code = 0;
-        }
-
-        parent::__construct($message, $code);
-    }
-
-}
-
-
-/**
- * Basic response wrapper for customCall
- *
- */
-class FitBitResponse
-{
-    public $response;
-    public $code;
-
-    /**
-     * @param  $response string
-     * @param  $code string
-     */
-    public function __construct($response, $code)
-    {
-        $this->response = $response;
-        $this->code = $code;
-    }
-
-}
-
-/**
- * Wrapper for rate limiting quota
- *
- */
-class FitBitRateLimiting
-{
-    public $viewer;
-    public $viewerReset;
-    public $viewerQuota;
-    public $client;
-    public $clientReset;
-    public $clientQuota;
-
-    public function __construct($viewer, $client, $viewerReset = null, $clientReset = null, $viewerQuota = null, $clientQuota = null)
-    {
-        $this->viewer = $viewer;
-        $this->viewerReset = $viewerReset;
-        $this->viewerQuota = $viewerQuota;
-        $this->client = $client;
-        $this->clientReset = $clientReset;
-        $this->clientQuota = $clientQuota;
-    }
-
-}
-
-
-
+} 
