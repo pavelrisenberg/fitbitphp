@@ -42,7 +42,7 @@ class FitBitPHP
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitbitPHP 0.71';
+    protected $userAgent = 'FitbitPHP 0.72';
     protected $debug;
 
     protected $clientDebug;
