@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2012/04/02
+ * Date: 2013/03/20
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.71 ($Id$)
+ * @version 0.72 ($Id$)
  */
 
 
