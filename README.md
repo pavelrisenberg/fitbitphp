@@ -11,7 +11,7 @@ Library is in BETA as well as the API, so still could be buggy. We're looking fo
 
 ## Note ##
 
-There is also a port of the library (which might differ in terms of the version available) tha Eli ported over to use a pure PHP implementation of OAuth, finally turning it into a composer install-able package. This might be helpful for those who having a trouble installing OAuth library package on their hostings. His fork is located here: https://github.com/TheSavior/fitbitp
+There is also a port of the library (which might differ in terms of the version available) that Eli ported over to use a pure PHP implementation of OAuth, finally turning it into a composer install-able package. This might be helpful for those who having a trouble installing OAuth library package on their 3rd party hosting. His fork is located on his GitHub here: https://github.com/TheSavior/fitbitphp
 
 
 
