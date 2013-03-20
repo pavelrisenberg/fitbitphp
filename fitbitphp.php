@@ -1,6 +1,6 @@
 <?php
 /**
- * FitbitPHP v.0.71. Basic Fitbit API wrapper for PHP using OAuth
+ * FitbitPHP v.0.72. Basic Fitbit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
