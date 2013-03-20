@@ -68,17 +68,15 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
 
 ## Changelog ##
 
-<<<<<<< HEAD
+* Version 0.72: 20 March, 2013:
+   * Bugs: minor bugfixes to put this thing together
 * Version 0.71: 02 April, 2012:
 	* API+: getIntradayTimeSeries
     * API+: setResponseFormat
 	* Improvement: support for json response format
     * Bugs: default parameters for getWater and getHeartRate
 	* Bugs: minor bugfixes to put this thing together
-=======
-* Version 0.72: 20 March, 2013:
-   * Bugs: minor bugfixes to put this thing together
->>>>>>>  * Bugs: minor bugfixes to put this thing together
+    * Bugs: minor bugfixes to put this thing together
 * Version 0.70: 09 December, 2011:
     * API+: getHeartRate, logHeartRate, deleteHeartRate (Heart logging)
     * API+: Additional resources in getTimeSeries (clean activities from the Tracker)
