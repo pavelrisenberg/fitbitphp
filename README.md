@@ -9,6 +9,11 @@ Library is in BETA as well as the API, so still could be buggy. We're looking fo
  * *Subscriptions*: Library has basic methods to add/delete subscriptions, unfortunately it's your headache to track the list and deploy server endpoints to receive notifications from Fitbit as well as register them at [http://dev.fitbit.com](http://dev.fitbit.com). See [Subscriptions-API](http://wiki.fitbit.com/display/API/Subscriptions-API) for more thoughts on that,
  * *Unauthenticated calls*: Some methods of Fitbit API grant access to public resources without need for the complete OAuth workflow, `searchFoods` and `getActivities` are two good example of such endpoints. Nevertheless, this calls should be signed with Authentication header as usual, but access_token parameter is omitted from signature base string. In terms of FitbitPHP, you can make such calls, but you shouldn't use `initSession` (so access_token wouldn't be set) and should explicitly set the user to fetch resources from before the call (via `setUser`).  
 
+## Note ##
+
+There is also a port of the library (which might differ in terms of the version available) tha Eli ported over to use a pure PHP implementation of OAuth, finally turning it into a composer install-able package. This might be helpful for those who having a trouble installing OAuth library package on their hostings. His fork is located here: https://github.com/TheSavior/fitbitp
+
+
 
 ## Usage ##
 
@@ -61,15 +66,19 @@ If you want to fetch data without complete OAuth workflow, only using consumer_k
     print_r($xml);
 
 
-
 ## Changelog ##
 
+<<<<<<< HEAD
 * Version 0.71: 02 April, 2012:
 	* API+: getIntradayTimeSeries
     * API+: setResponseFormat
 	* Improvement: support for json response format
     * Bugs: default parameters for getWater and getHeartRate
 	* Bugs: minor bugfixes to put this thing together
+=======
+* Version 0.72: 20 March, 2013:
+   * Bugs: minor bugfixes to put this thing together
+>>>>>>>  * Bugs: minor bugfixes to put this thing together
 * Version 0.70: 09 December, 2011:
     * API+: getHeartRate, logHeartRate, deleteHeartRate (Heart logging)
     * API+: Additional resources in getTimeSeries (clean activities from the Tracker)

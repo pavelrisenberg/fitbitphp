@@ -2142,7 +2142,7 @@ class FitBitPHP
     {
         $headers = $this->getHeaders();
         $parameters = array();
-        $parameters['accept'] = 'true';
+        $parameters['accept'] = 'false';
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-/friends/invitations/" . $userId . "." . $this->responseFormat, $parameters, OAUTH_HTTP_METHOD_POST, $headers);
