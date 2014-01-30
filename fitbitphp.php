@@ -1759,10 +1759,9 @@ class FitBitPHP
      *
      *            'caloriesOut', 'steps', 'distance', 'floors', 'elevation'
      *            'minutesSedentary', 'minutesLightlyActive', 'minutesFairlyActive', 'minutesVeryActive',
-     *            'activeScore', 'activityCalories',
+     *            'activityCalories',
      *
      *            'tracker_caloriesOut', 'tracker_steps', 'tracker_distance', 'tracker_floors', 'tracker_elevation'
-     *            'tracker_activeScore'
      *
      *            'startTime', 'timeInBed', 'minutesAsleep', 'minutesAwake', 'awakeningsCount',
      *            'minutesToFallAsleep', 'minutesAfterWakeup',
@@ -1814,9 +1813,6 @@ class FitBitPHP
             case 'minutesVeryActive':
                 $path = '/activities/log/minutesVeryActive';
                 break;
-            case 'activeScore':
-                $path = '/activities/log/activeScore';
-                break;
             case 'activityCalories':
                 $path = '/activities/log/activityCalories';
                 break;
@@ -1835,9 +1831,6 @@ class FitBitPHP
                 break;
             case 'tracker_elevation':
                 $path = '/activities/log/tracker/elevation';
-                break;
-            case 'tracker_activeScore':
-                $path = '/activities/log/tracker/activeScore';
                 break;
 
             case 'startTime':
