@@ -95,7 +95,7 @@ class FitBitPHP
      * @param string $apiHost API host, i.e. api.fitbit.com (do you know any others?)
      * @param string $authHost Auth host, i.e. www.fitbit.com
      */
-    public function setEndpointBase($apiHost, $authHost, $https = true, $httpsApi = false)
+    public function setEndpointBase($apiHost, $authHost, $https = true, $httpsApi = true)
     {
         $this->apiHost = $apiHost;
         $this->authHost = $authHost;
@@ -103,7 +103,7 @@ class FitBitPHP
         $this->initUrls($https, $httpsApi);
     }
 
-    private function initUrls($https = true, $httpsApi = false)
+    private function initUrls($https = true, $httpsApi = true)
     {
 
         if ($httpsApi)
