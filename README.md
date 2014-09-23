@@ -54,7 +54,7 @@ Second, if you want to implement some API calls on user's behalf later (say daem
 
 **Note.** By default, all requests are made to work with resources of authorized user (viewer), however you can use `setUser` method to set another user, this would work only for several endpoints, which grant access to resources of other users and only if that user granted permissions to access his data ("Friends" or "Anyone").
 
-If you want to fetch data without complete OAuth workflow, only using consumer_key without access_token, you can do that also (check which endpoints are okey with such calls on Fitbit API documentation):
+If you want to fetch data without complete OAuth workflow, only using consumer_key without access_token, you can do that also (check which endpoints are okay with such calls on Fitbit API documentation). If trying to retrieve your personal profile, you will need the 6 digit User ID found within your dashboard. To find it, go to privacy settings, click on the "View profile" link in the upper-right and note the ID in the URL:
 
     require 'fitbitphp.php';
 
