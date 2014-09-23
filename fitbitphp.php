@@ -1,6 +1,6 @@
 <?php
 /**
- * FitbitPHP v.0.72. Basic Fitbit API wrapper for PHP using OAuth
+ * FitbitPHP v.0.73. Basic Fitbit API wrapper for PHP using OAuth
  *
  * Note: Library is in beta and provided as-is. We hope to add features as API grows, however
  *       feel free to fork, extend and send pull requests to us.
@@ -8,9 +8,9 @@
  * - https://github.com/heyitspavel/fitbitphp
  *
  *
- * Date: 2013/03/20
+ * Date: 2014/09/23
  * Requires OAuth 1.0.0, SimpleXML
- * @version 0.72 ($Id$)
+ * @version 0.73 ($Id$)
  */
 
 
