@@ -1117,7 +1117,7 @@ class FitBitPHP
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
             $response = $this->parseResponse($response);
-            if (!$xml)
+            if (!$response)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
                 throw new FitBitException($responseInfo['http_code'], $response->message, 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
